@@ -21,17 +21,17 @@ import java_cup.runtime.Symbol;
 
     private int curr_lineno = 1;
     int get_curr_lineno() {
-	return curr_lineno;
+        return curr_lineno;
     }
 
     private AbstractSymbol filename;
 
     void set_filename(String fname) {
-	filename = AbstractTable.stringtable.addString(fname);
+        filename = AbstractTable.stringtable.addString(fname);
     }
 
     AbstractSymbol curr_filename() {
-	return filename;
+        return filename;
     }
 %}
 
@@ -55,13 +55,13 @@ import java_cup.runtime.Symbol;
 
     switch(yy_lexical_state) {
     case YYINITIAL:
-	/* nothing special to do in the initial state */
-	break;
-	/* If necessary, add code for other states here, e.g:
-	   case COMMENT:
-	   ...
-	   break;
-	*/
+        /* nothing special to do in the initial state */
+        break;
+        /* If necessary, add code for other states here, e.g:
+           case COMMENT:
+           ...
+           break;
+        */
     }
     return new Symbol(TokenConstants.EOF);
 %eofval}
