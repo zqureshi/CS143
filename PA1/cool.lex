@@ -125,7 +125,25 @@ Z = [zZ]
 <YYINITIAL>{N}{O}{T} { return new Symbol(TokenConstants.NOT); }
 <YYINITIAL>t{R}{U}{E} { return new Symbol(TokenConstants.BOOL_CONST, BoolConst.truebool); }
 
+<YYINITIAL>"<-" { return new Symbol(TokenConstants.ASSIGN); }
+<YYINITIAL>";" { return new Symbol(TokenConstants.SEMI); }
+<YYINITIAL>":" { return new Symbol(TokenConstants.COLON); }
+<YYINITIAL>"," { return new Symbol(TokenConstants.COMMA); }
+<YYINITIAL>"." { return new Symbol(TokenConstants.DOT); }
 <YYINITIAL>"=>" { return new Symbol(TokenConstants.DARROW); }
+<YYINITIAL>"+" { return new Symbol(TokenConstants.PLUS); }
+<YYINITIAL>"-" { return new Symbol(TokenConstants.MINUS); }
+<YYINITIAL>"*" { return new Symbol(TokenConstants.MULT); }
+<YYINITIAL>"/" { return new Symbol(TokenConstants.DIV); }
+<YYINITIAL>"~" { return new Symbol(TokenConstants.NEG); }
+<YYINITIAL>"<" { return new Symbol(TokenConstants.LT); }
+<YYINITIAL>"<=" { return new Symbol(TokenConstants.LE); }
+<YYINITIAL>"=" { return new Symbol(TokenConstants.EQ); }
+<YYINITIAL>"(" { return new Symbol(TokenConstants.LPAREN); }
+<YYINITIAL>")" { return new Symbol(TokenConstants.RPAREN); }
+<YYINITIAL>"{" { return new Symbol(TokenConstants.LBRACE); }
+<YYINITIAL>"}" { return new Symbol(TokenConstants.RBRACE); }
+<YYINITIAL>"@" { return new Symbol(TokenConstants.AT); }
 
 <YYINITIAL>^-- { yybegin(SINGLE_COMMENT); }
 <YYINITIAL,BLOCK_COMMENT>"(*" { ++comment_level; yybegin(BLOCK_COMMENT); }
