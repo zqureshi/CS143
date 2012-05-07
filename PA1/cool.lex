@@ -75,7 +75,7 @@ import java_cup.runtime.Symbol;
 %state SINGLE_COMMENT
 %state BLOCK_COMMENT
 
-WHITESPACE = [ \t\r\n]
+WHITESPACE = [ \n\f\r\t\v]
 %%
 
 <YYINITIAL>"=>" { return new Symbol(TokenConstants.DARROW); }
