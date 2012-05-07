@@ -74,6 +74,7 @@ import java_cup.runtime.Symbol;
 
 %state SINGLE_COMMENT
 %state BLOCK_COMMENT
+%state STRING
 
 WHITESPACE = [ \n\f\r\t\v]
 
@@ -148,6 +149,12 @@ Z = [zZ]
 <YYINITIAL>[0-9]+ { return new Symbol(TokenConstants.INT_CONST, AbstractTable.inttable.addString(yytext())); }
 <YYINITIAL>[A-Z][_0-9a-zA-Z]* { return new Symbol(TokenConstants.TYPEID, AbstractTable.idtable.addString(yytext())); }
 <YYINITIAL>[a-z][_0-9a-zA-Z]* { return new Symbol(TokenConstants.OBJECTID, AbstractTable.idtable.addString(yytext())); }
+
+<YYINITIAL>"\"" { yybegin(STRING); }
+
+<STRING>"\"" { yybegin(YYINITIAL); return new Symbol(TokenConstants.STR_CONST, AbstractTable.stringtable.addString(string_buf.toString())); }
+<STRING>"\n" { string_buf.append('\n'); }
+<STRING>. { string_buf.append(yytext()); }
 
 <YYINITIAL>^-- { yybegin(SINGLE_COMMENT); }
 <YYINITIAL,BLOCK_COMMENT>"(*" { ++comment_level; yybegin(BLOCK_COMMENT); }
