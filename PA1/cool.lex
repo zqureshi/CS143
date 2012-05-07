@@ -76,7 +76,54 @@ import java_cup.runtime.Symbol;
 %state BLOCK_COMMENT
 
 WHITESPACE = [ \n\f\r\t\v]
+
+A = [aA]
+B = [bB]
+C = [cC]
+D = [dD]
+E = [eE]
+F = [fF]
+G = [gG]
+H = [hH]
+I = [iI]
+J = [jJ]
+K = [kK]
+L = [lL]
+M = [mM]
+N = [nN]
+O = [oO]
+P = [pP]
+Q = [qQ]
+R = [rR]
+S = [sS]
+T = [tT]
+U = [uU]
+V = [vV]
+W = [wW]
+X = [xX]
+Y = [yY]
+Z = [zZ]
 %%
+
+<YYINITIAL>{C}{L}{A}{S}{S} { return new Symbol(TokenConstants.CLASS); }
+<YYINITIAL>{E}{L}{S}{E} { return new Symbol(TokenConstants.ELSE); }
+<YYINITIAL>f{A}{L}{S}{E} { return new Symbol(TokenConstants.BOOL_CONST, BoolConst.falsebool); }
+<YYINITIAL>{F}{I} { return new Symbol(TokenConstants.FI); }
+<YYINITIAL>{I}{F} { return new Symbol(TokenConstants.IF); }
+<YYINITIAL>{I}{N} { return new Symbol(TokenConstants.IN); }
+<YYINITIAL>{I}{N}{H}{E}{R}{I}{T}{S} { return new Symbol(TokenConstants.INHERITS); }
+<YYINITIAL>{I}{S}{V}{O}{I}{D} { return new Symbol(TokenConstants.ISVOID); }
+<YYINITIAL>{L}{E}{T} { return new Symbol(TokenConstants.LET); }
+<YYINITIAL>{L}{O}{O}{P} { return new Symbol(TokenConstants.LOOP); }
+<YYINITIAL>{P}{O}{O}{L} { return new Symbol(TokenConstants.POOL); }
+<YYINITIAL>{T}{H}{E}{N} { return new Symbol(TokenConstants.THEN); }
+<YYINITIAL>{W}{H}{I}{L}{E} { return new Symbol(TokenConstants.WHILE); }
+<YYINITIAL>{C}{A}{S}{E} { return new Symbol(TokenConstants.CASE); }
+<YYINITIAL>{E}{S}{A}{C} { return new Symbol(TokenConstants.ESAC); }
+<YYINITIAL>{N}{E}{W} { return new Symbol(TokenConstants.NEW); }
+<YYINITIAL>{O}{F} { return new Symbol(TokenConstants.OF); }
+<YYINITIAL>{N}{O}{T} { return new Symbol(TokenConstants.NOT); }
+<YYINITIAL>t{R}{U}{E} { return new Symbol(TokenConstants.BOOL_CONST, BoolConst.truebool); }
 
 <YYINITIAL>"=>" { return new Symbol(TokenConstants.DARROW); }
 
