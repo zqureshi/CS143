@@ -19,6 +19,9 @@ import java_cup.runtime.Symbol;
     // For assembling string constants
     StringBuffer string_buf = new StringBuffer();
 
+    // Count nested comments
+    private int comment_level = 0;
+
     private int curr_lineno = 1;
     int get_curr_lineno() {
         return curr_lineno;
@@ -69,13 +72,24 @@ import java_cup.runtime.Symbol;
 %class CoolLexer
 %cup
 
+%state SINGLE_COMMENT
+%state BLOCK_COMMENT
+
+WHITESPACE = [ \t\r\n]
 %%
 
-<YYINITIAL>"=>"			{ /* Sample lexical rule for "=>" arrow.
-                                     Further lexical rules should be defined
-                                     here, after the last %% separator */
-                                  return new Symbol(TokenConstants.DARROW); }
+<YYINITIAL>"=>" { return new Symbol(TokenConstants.DARROW); }
 
+<YYINITIAL>^-- { yybegin(SINGLE_COMMENT); }
+<YYINITIAL,BLOCK_COMMENT>"(*" { ++comment_level; yybegin(BLOCK_COMMENT); }
+
+<SINGLE_COMMENT>\n { yybegin(YYINITIAL); }
+<BLOCK_COMMENT>"*)" { if(--comment_level == 0) { yybegin(YYINITIAL); } }
+
+<SINGLE_COMMENT,BLOCK_COMMENT>. { }
+
+\n                              { ++curr_lineno; }
+{WHITESPACE}                    { }
 .                               { /* This rule should be the very last
                                      in your lexical specification and
                                      will match match everything not
