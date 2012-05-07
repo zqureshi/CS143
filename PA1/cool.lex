@@ -156,7 +156,7 @@ Z = [zZ]
 <STRING>"\n" { string_buf.append('\n'); }
 <STRING>. { string_buf.append(yytext()); }
 
-<YYINITIAL>^-- { yybegin(SINGLE_COMMENT); }
+<YYINITIAL>^-- { ++curr_lineno; yybegin(SINGLE_COMMENT); }
 <YYINITIAL,BLOCK_COMMENT>"(*" { ++comment_level; yybegin(BLOCK_COMMENT); }
 
 <SINGLE_COMMENT>\n { yybegin(YYINITIAL); }
