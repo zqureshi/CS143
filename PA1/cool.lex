@@ -150,7 +150,7 @@ Z = [zZ]
 <YYINITIAL>[A-Z][_0-9a-zA-Z]* { return new Symbol(TokenConstants.TYPEID, AbstractTable.idtable.addString(yytext())); }
 <YYINITIAL>[a-z][_0-9a-zA-Z]* { return new Symbol(TokenConstants.OBJECTID, AbstractTable.idtable.addString(yytext())); }
 
-<YYINITIAL>"\"" { yybegin(STRING); }
+<YYINITIAL>"\"" { string_buf.setLength(0); yybegin(STRING); }
 
 <STRING>"\"" { yybegin(YYINITIAL); return new Symbol(TokenConstants.STR_CONST, AbstractTable.stringtable.addString(string_buf.toString())); }
 <STRING>"\n" { string_buf.append('\n'); }
