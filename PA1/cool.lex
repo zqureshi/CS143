@@ -145,6 +145,10 @@ Z = [zZ]
 <YYINITIAL>"}" { return new Symbol(TokenConstants.RBRACE); }
 <YYINITIAL>"@" { return new Symbol(TokenConstants.AT); }
 
+<YYINITIAL>[0-9]+ { return new Symbol(TokenConstants.INT_CONST, AbstractTable.inttable.addString(yytext())); }
+<YYINITIAL>[A-Z][_0-9a-zA-Z]* { return new Symbol(TokenConstants.TYPEID, AbstractTable.idtable.addString(yytext())); }
+<YYINITIAL>[a-z][_0-9a-zA-Z]* { return new Symbol(TokenConstants.OBJECTID, AbstractTable.idtable.addString(yytext())); }
+
 <YYINITIAL>^-- { yybegin(SINGLE_COMMENT); }
 <YYINITIAL,BLOCK_COMMENT>"(*" { ++comment_level; yybegin(BLOCK_COMMENT); }
 
