@@ -60,9 +60,6 @@ import java_cup.runtime.Symbol;
     case YYINITIAL:
         /* nothing special to do in the initial state */
         break;
-    case SINGLE_COMMENT:
-        yybegin(YYINITIAL);
-        return new Symbol(TokenConstants.ERROR, "EOF in Comment");
     case BLOCK_COMMENT:
         yybegin(YYINITIAL);
         return new Symbol(TokenConstants.ERROR, "EOF in Comment");
