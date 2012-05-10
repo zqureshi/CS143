@@ -14,7 +14,7 @@ import java_cup.runtime.Symbol;
  *  was there initially.  */
 
     // Max size of string constants
-    static int MAX_STR_CONST = 1025;
+    static int MAX_STR_CONST = 1024;
 
     // For assembling string constants
     StringBuffer string_buf = new StringBuffer();
@@ -35,6 +35,15 @@ import java_cup.runtime.Symbol;
 
     AbstractSymbol curr_filename() {
         return filename;
+    }
+
+    Symbol maxLengthExceeded() {
+      if (string_buf.length() >= MAX_STR_CONST) {
+        yybegin(STRING_ERROR);
+        return new Symbol(TokenConstants.ERROR, "String constant too long");
+      } else {
+        return null;
+      }
     }
 %}
 
@@ -167,14 +176,14 @@ Z = [zZ]
 <YYINITIAL>"\"" { string_buf.setLength(0); yybegin(STRING); }
 
 <STRING>\" { yybegin(YYINITIAL); return new Symbol(TokenConstants.STR_CONST, AbstractTable.stringtable.addString(string_buf.toString())); }
-<STRING>"\b" { string_buf.append('\b'); }
-<STRING>"\t" { string_buf.append('\t'); }
-<STRING>"\n"|\\\n { string_buf.append('\n'); }
-<STRING>"\f" { string_buf.append('\f'); }
-<STRING>\\ { yybegin(STRING_BACKSLASH); }
+<STRING>"\b" { if(maxLengthExceeded() != null) { return maxLengthExceeded(); } string_buf.append('\b'); }
+<STRING>"\t" { if(maxLengthExceeded() != null) { return maxLengthExceeded(); } string_buf.append('\t'); }
+<STRING>"\n"|\\\n { if(maxLengthExceeded() != null) { return maxLengthExceeded(); } string_buf.append('\n'); }
+<STRING>"\f" { if(maxLengthExceeded() != null) { return maxLengthExceeded(); } string_buf.append('\f'); }
+<STRING>\\ { if(maxLengthExceeded() != null) { return maxLengthExceeded(); } yybegin(STRING_BACKSLASH); }
 <STRING>\n { yybegin(YYINITIAL); return new Symbol(TokenConstants.ERROR, "Unterminated string constant"); }
 <STRING>\0 { yybegin(STRING_ERROR); return new Symbol(TokenConstants.ERROR, "String contains null character"); }
-<STRING>. { string_buf.append(yytext()); }
+<STRING>. { if(maxLengthExceeded() != null) { return maxLengthExceeded(); } string_buf.append(yytext()); }
 
 <STRING_BACKSLASH>. { yybegin(STRING); string_buf.append(yytext()); }
 
