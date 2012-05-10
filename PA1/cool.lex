@@ -184,7 +184,7 @@ Z = [zZ]
 <STRING_ERROR>\n|\" { yybegin(YYINITIAL); }
 <STRING_ERROR>. { }
 
-<YYINITIAL>^-- { ++curr_lineno; yybegin(SINGLE_COMMENT); }
+<YYINITIAL>-- { ++curr_lineno; yybegin(SINGLE_COMMENT); }
 <YYINITIAL,BLOCK_COMMENT>"(*" { ++comment_level; yybegin(BLOCK_COMMENT); }
 
 <SINGLE_COMMENT>\n { yybegin(YYINITIAL); }
