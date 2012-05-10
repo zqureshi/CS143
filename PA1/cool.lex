@@ -153,7 +153,11 @@ Z = [zZ]
 <YYINITIAL>"\"" { string_buf.setLength(0); yybegin(STRING); }
 
 <STRING>"\"" { yybegin(YYINITIAL); return new Symbol(TokenConstants.STR_CONST, AbstractTable.stringtable.addString(string_buf.toString())); }
-<STRING>"\n" { string_buf.append('\n'); }
+<STRING>\\\b { string_buf.append('\b'); }
+<STRING>\\\t { string_buf.append('\t'); }
+<STRING>\\\n { string_buf.append('\n'); }
+<STRING>\\\f { string_buf.append('\f'); }
+<STRING>"\n" { return new Symbol(TokenConstants.ERROR, "String contains null character"); }
 <STRING>. { string_buf.append(yytext()); }
 
 <YYINITIAL>^-- { ++curr_lineno; yybegin(SINGLE_COMMENT); }
