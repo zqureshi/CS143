@@ -93,7 +93,7 @@ import java_cup.runtime.Symbol;
 %state STRING_ERROR
 %state STRING_BACKSLASH
 
-WHITESPACE = [ \n\f\r\t\v]
+WHITESPACE = [ \n\f\r\t\x0B]
 
 A = [aA]
 B = [bB]
