@@ -75,6 +75,7 @@ import java_cup.runtime.Symbol;
 %state SINGLE_COMMENT
 %state BLOCK_COMMENT
 %state STRING
+%state STRING_ERROR
 
 WHITESPACE = [ \n\f\r\t\v]
 
@@ -158,8 +159,13 @@ Z = [zZ]
 <STRING>"\n"|\\\n { string_buf.append('\n'); }
 <STRING>"\f" { string_buf.append('\f'); }
 <STRING>\n { yybegin(YYINITIAL); return new Symbol(TokenConstants.ERROR, "Unterminated string constant"); }
-<STRING>\0 { return new Symbol(TokenConstants.ERROR, "String contains null character"); }
+<STRING>\0 { yybegin(STRING_ERROR); return new Symbol(TokenConstants.ERROR, "String contains null character"); }
+<STRING>EOF { yybegin(STRING_ERROR); return new Symbol(TokenConstants.ERROR, "EOF in String"); }
 <STRING>. { string_buf.append(yytext()); }
+
+<STRING_ERROR>\n|\" { yybegin(YYINITIAL); }
+<STRING_ERROR>EOF { yybegin(STRING_ERROR); return new Symbol(TokenConstants.ERROR, "EOF in String"); }
+<STRING_ERROR>. { }
 
 <YYINITIAL>^-- { ++curr_lineno; yybegin(SINGLE_COMMENT); }
 <YYINITIAL,BLOCK_COMMENT>"(*" { ++comment_level; yybegin(BLOCK_COMMENT); }
