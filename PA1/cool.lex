@@ -168,6 +168,8 @@ Z = [zZ]
 
 <SINGLE_COMMENT,BLOCK_COMMENT>. { }
 
+<YYINITIAL>"*)" { return new Symbol(TokenConstants.ERROR, "Unmatched *)"); }
+
 \n                              { ++curr_lineno; }
 {WHITESPACE}                    { }
 .                               { /* This rule should be the very last
