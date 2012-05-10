@@ -60,6 +60,21 @@ import java_cup.runtime.Symbol;
     case YYINITIAL:
         /* nothing special to do in the initial state */
         break;
+    case SINGLE_COMMENT:
+        yybegin(YYINITIAL);
+        return new Symbol(TokenConstants.ERROR, "EOF in Comment");
+    case BLOCK_COMMENT:
+        yybegin(YYINITIAL);
+        return new Symbol(TokenConstants.ERROR, "EOF in Comment");
+    case STRING:
+        yybegin(YYINITIAL);
+        return new Symbol(TokenConstants.ERROR, "EOF in String");
+    case STRING_ERROR:
+        yybegin(YYINITIAL);
+        return new Symbol(TokenConstants.ERROR, "EOF in String");
+    case STRING_BACKSLASH:
+        yybegin(YYINITIAL);
+        return new Symbol(TokenConstants.ERROR, "EOF in String");
         /* If necessary, add code for other states here, e.g:
            case COMMENT:
            ...
@@ -76,6 +91,7 @@ import java_cup.runtime.Symbol;
 %state BLOCK_COMMENT
 %state STRING
 %state STRING_ERROR
+%state STRING_BACKSLASH
 
 WHITESPACE = [ \n\f\r\t\v]
 
@@ -158,13 +174,14 @@ Z = [zZ]
 <STRING>"\t" { string_buf.append('\t'); }
 <STRING>"\n"|\\\n { string_buf.append('\n'); }
 <STRING>"\f" { string_buf.append('\f'); }
+<STRING>\\ { yybegin(STRING_BACKSLASH); }
 <STRING>\n { yybegin(YYINITIAL); return new Symbol(TokenConstants.ERROR, "Unterminated string constant"); }
 <STRING>\0 { yybegin(STRING_ERROR); return new Symbol(TokenConstants.ERROR, "String contains null character"); }
-<STRING>EOF { yybegin(STRING_ERROR); return new Symbol(TokenConstants.ERROR, "EOF in String"); }
 <STRING>. { string_buf.append(yytext()); }
 
+<STRING_BACKSLASH>. { yybegin(STRING); string_buf.append(yytext()); }
+
 <STRING_ERROR>\n|\" { yybegin(YYINITIAL); }
-<STRING_ERROR>EOF { yybegin(STRING_ERROR); return new Symbol(TokenConstants.ERROR, "EOF in String"); }
 <STRING_ERROR>. { }
 
 <YYINITIAL>^-- { ++curr_lineno; yybegin(SINGLE_COMMENT); }
