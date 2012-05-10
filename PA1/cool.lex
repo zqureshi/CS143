@@ -185,6 +185,7 @@ Z = [zZ]
 <STRING>\0 { yybegin(STRING_ERROR); return new Symbol(TokenConstants.ERROR, "String contains null character"); }
 <STRING>. { if(maxLengthExceeded() != null) { return maxLengthExceeded(); } string_buf.append(yytext()); }
 
+<STRING_BACKSLASH>\0 { yybegin(STRING_ERROR); return new Symbol(TokenConstants.ERROR, "String contains null character"); }
 <STRING_BACKSLASH>. { yybegin(STRING); string_buf.append(yytext()); }
 
 <STRING_ERROR>\n|\" { yybegin(YYINITIAL); }
