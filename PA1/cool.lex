@@ -99,6 +99,7 @@ import java_cup.runtime.Symbol;
 %state STRING_ERROR
 %state STRING_BACKSLASH
 
+CHARACTERS = [^\0]
 WHITESPACE = [ \n\f\r\t\x0B]
 
 A = [aA]
@@ -183,13 +184,13 @@ Z = [zZ]
 <STRING>\\ { if(maxLengthExceeded() != null) { return maxLengthExceeded(); } yybegin(STRING_BACKSLASH); }
 <STRING>\n { yybegin(YYINITIAL); return new Symbol(TokenConstants.ERROR, "Unterminated string constant"); }
 <STRING>\0 { yybegin(STRING_ERROR); return new Symbol(TokenConstants.ERROR, "String contains null character"); }
-<STRING>. { if(maxLengthExceeded() != null) { return maxLengthExceeded(); } string_buf.append(yytext()); }
+<STRING>{CHARACTERS} { if(maxLengthExceeded() != null) { return maxLengthExceeded(); } string_buf.append(yytext()); }
 
 <STRING_BACKSLASH>\0 { yybegin(STRING_ERROR); return new Symbol(TokenConstants.ERROR, "String contains null character"); }
-<STRING_BACKSLASH>. { yybegin(STRING); string_buf.append(yytext()); }
+<STRING_BACKSLASH>{CHARACTERS} { yybegin(STRING); string_buf.append(yytext()); }
 
 <STRING_ERROR>\n|\" { yybegin(YYINITIAL); }
-<STRING_ERROR>. { }
+<STRING_ERROR>{CHARACTERS} { }
 
 <YYINITIAL>-- { yybegin(SINGLE_COMMENT); }
 <YYINITIAL,BLOCK_COMMENT>"(*" { ++comment_level; yybegin(BLOCK_COMMENT); }
