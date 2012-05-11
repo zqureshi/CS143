@@ -191,10 +191,10 @@ Z = [zZ]
 <STRING_ERROR>\n|\" { yybegin(YYINITIAL); }
 <STRING_ERROR>. { }
 
-<YYINITIAL>-- { ++curr_lineno; yybegin(SINGLE_COMMENT); }
+<YYINITIAL>-- { yybegin(SINGLE_COMMENT); }
 <YYINITIAL,BLOCK_COMMENT>"(*" { ++comment_level; yybegin(BLOCK_COMMENT); }
 
-<SINGLE_COMMENT>\n { yybegin(YYINITIAL); }
+<SINGLE_COMMENT>\n { ++curr_lineno; yybegin(YYINITIAL); }
 <BLOCK_COMMENT>"*)" { if(--comment_level == 0) { yybegin(YYINITIAL); } }
 
 <SINGLE_COMMENT,BLOCK_COMMENT>. { }
